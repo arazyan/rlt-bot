@@ -1,10 +1,15 @@
-
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 # мб сделать кнопки назад
 # добавить функцию (возможно вы имели в виду?)
 # первый кейборд - рега или ответы на часто задаваемые вопросы?
 # доп. продукты (помощь с регой, помощь с аккредитацией и проч.)
 
 # прежде чем что-то сделать, чат-бот должен понять, аккредитован ли пользователь
+from urllib.parse import urlencode
+
+
+
 
 from vkbottle.bot import Bot, Message
 
@@ -32,12 +37,7 @@ red   = KeyboardButtonColor.NEGATIVE
 blue  = KeyboardButtonColor.PRIMARY
 
 class RegData(BaseStateGroup):
-    SKUS        = 'skus'
-    SIZE        = 'size'
-    SHIP_DATA   = 'ship_data'
-    FINISH      = 'promo'
-    PROMO_INPUT = 'promo'
-    PROMO_DATA  = 'promocode'
+    QUERY        = 'empty'
 
 
 # beginning
@@ -153,7 +153,9 @@ async def client_is_zakazchik(message: Message):
 
 @bot.on.private_message(payload={'cmd' : 'zakazchik-44-fz'})
 async def scenario_44_fz_handler(message: Message):
-    await message.answer('работает!')
+    await message.answer('Пожалуйста, введите запрос и отправьте его сообщением ниже')
+    await bot.state_dispenser.set(message.peer_id, RegData.QUERY)
+    return None
 
 @bot.on.private_message(payload={'cmd' : 'zakazchik-223-fz'})
 async def scenario_223_fz_handler(message: Message):
@@ -235,6 +237,7 @@ async def client_is_postavshik(message: Message):
 async def scenario_44_fz_handler(message: Message):
     await message.answer('работает!')
 
+
 @bot.on.private_message(payload={'cmd' : 'postavshik-223-fz'})
 async def scenario_223_fz_handler(message: Message):
     await message.answer('работает!')
@@ -250,5 +253,14 @@ async def scenario_fkr_handler(message: Message):
 @bot.on.private_message(payload={'cmd' : 'postavshik-imtorgi'})
 async def scenario_imtorgi_handler(message: Message):
     await message.answer('работает!')
+
+
+@bot.on.private_message(state=RegData.QUERY)
+async def result_handler(message: Message):
+    string = message.text
+    encoded_string = urlencode({'query': string}).replace('query=', '')
+
+    link = f'https://www.roseltorg.ru/procedures/search?sale=0&query_field={encoded_string}'
+    await message.answer(f'Результат: \n\n{link}')
 
 bot.run_forever()
