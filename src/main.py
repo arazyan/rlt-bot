@@ -30,14 +30,15 @@ from config import group_token, user_token
 api = API(user_token)
 bot = Bot(group_token)
 
-# ctx = CtxStorage()
+ctx = CtxStorage()
 
 green = KeyboardButtonColor.POSITIVE
 red   = KeyboardButtonColor.NEGATIVE
 blue  = KeyboardButtonColor.PRIMARY
 
 class RegData(BaseStateGroup):
-    QUERY        = 'empty'
+    QUERY_ZAKUPKA        = 'empty'
+    QUERY_POSTAVKA       = 'empty'
 
 
 # beginning
@@ -154,24 +155,40 @@ async def client_is_zakazchik(message: Message):
 @bot.on.private_message(payload={'cmd' : 'zakazchik-44-fz'})
 async def scenario_44_fz_handler(message: Message):
     await message.answer('Пожалуйста, введите запрос и отправьте его сообщением ниже')
-    await bot.state_dispenser.set(message.peer_id, RegData.QUERY)
+    await bot.state_dispenser.set(message.peer_id, RegData.QUERY_ZAKUPKA)
+    ctx.set('source', '1')
     return None
 
 @bot.on.private_message(payload={'cmd' : 'zakazchik-223-fz'})
 async def scenario_223_fz_handler(message: Message):
-    await message.answer('работает!')
+    await message.answer('Пожалуйста, введите запрос и отправьте его сообщением ниже')
+    await bot.state_dispenser.set(message.peer_id, RegData.QUERY_ZAKUPKA)
+    ctx.set('source', '2')
+    return None
 
 @bot.on.private_message(payload={'cmd' : 'zakazchik-rb'})
 async def scenario_rb_handler(message: Message):
-    await message.answer('работает!')
+    await message.answer('Пожалуйста, введите запрос и отправьте его сообщением ниже')
+    await bot.state_dispenser.set(message.peer_id, RegData.QUERY_ZAKUPKA)
+    ctx.set('source', '24')
+    return None
+
 
 @bot.on.private_message(payload={'cmd' : 'zakazchik-fkr'})
 async def scenario_fkr_handler(message: Message):
-    await message.answer('работает!')
+    await message.answer('Пожалуйста, введите запрос и отправьте его сообщением ниже')
+    await bot.state_dispenser.set(message.peer_id, RegData.QUERY_ZAKUPKA)
+    ctx.set('source', '13')
+    return None
 
-@bot.on.private_message(payload={'cmd' : 'zakazchik-imtorgi'})
-async def scenario_imtorgi_handler(message: Message):
-    await message.answer('работает!')
+
+# @bot.on.private_message(payload={'cmd' : 'zakazchik-imtorgi'})
+# async def scenario_imtorgi_handler(message: Message):
+#     await message.answer('Пожалуйста, введите запрос и отправьте его сообщением ниже')
+#     await bot.state_dispenser.set(message.peer_id, RegData.QUERY_ZAKUPKA)
+#     ctx.set('source', '1')
+#     return None
+
 
 @bot.on.private_message(payload={'cmd' : 'postavshik'})
 async def client_is_postavshik(message: Message):
@@ -255,12 +272,15 @@ async def scenario_imtorgi_handler(message: Message):
     await message.answer('работает!')
 
 
-@bot.on.private_message(state=RegData.QUERY)
+@bot.on.private_message(state=RegData.QUERY_ZAKUPKA)
 async def result_handler(message: Message):
     string = message.text
     encoded_string = urlencode({'query': string}).replace('query=', '')
 
-    link = f'https://www.roseltorg.ru/procedures/search?sale=0&query_field={encoded_string}'
-    await message.answer(f'Результат: \n\n{link}')
+    link = f'https://www.roseltorg.ru/procedures/search?sale=1&query_field={encoded_string}'
+    
+    keyboard = Keyboard().add(Text('В начало', {'cmd' : 'start'}), color=blue)
+    await message.answer(f'Результат: \n\n{link}', keyboard=keyboard)
+
 
 bot.run_forever()
