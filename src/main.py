@@ -96,44 +96,55 @@ async def postavshik_or_pokupatel(message: Message):
 
 @bot.on.private_message(payload={'cmd' : 'zakazchik'})
 async def client_is_zakazchik(message: Message):
+    await message.answer("""
+    Как получить доступ к работе на площадке для заказчиков?
+    
+        1️⃣ Получите электронную подпись
+
+        2️⃣ Зарегистрируйтесь на электронной площадке
+
+        3️⃣ Разместите извещение в системе
+    """)
+
     keyboard_1 = Keyboard().add(Text('Перейти', {'cmd' : 'zakazchik-44-fz'}),   color=blue)
     keyboard_2 = Keyboard().add(Text('Перейти', {'cmd' : 'zakazchik-223-fz'}),  color=blue)
     keyboard_3 = Keyboard().add(Text('Перейти', {'cmd' : 'zakazchik-rb'}),      color=blue)
     keyboard_4 = Keyboard().add(Text('Перейти', {'cmd' : 'zakazchik-fkr'}),     color=blue)
     keyboard_5 = Keyboard().add(Text('Перейти', {'cmd' : 'zakazchik-imtorgi'}), color=blue)
 
-    keyboard = Keyboard(inline=True).add(OpenLink('https://google.com', 'FAQ'), color=blue)
-    
+    keyboard = Keyboard(inline=True).add(OpenLink('https://www.roseltorg.ru/for-customers', 'Помощь заказчикам'), color=blue)
+
     carousel = template_gen(
         TemplateElement(
             title        = '44-ФЗ',
-            description  = 'Описание',
+            description  = 'Государственные закупки',
             buttons      = keyboard_1.get_json()
         ),
         TemplateElement(
             title        = '223-ФЗ',
-            description  = 'Описание',
+            description  = 'Коммерчиские и корпоративные закупки',
             buttons      = keyboard_2.get_json()
         ),
         TemplateElement(
             title        = 'РБ',
-            description  = 'Описание',
+            description  = 'Росэлторг.Бизнес',
             buttons      = keyboard_3.get_json()
         ),
         TemplateElement(
             title        = 'ФКР',
-            description  = 'Описание',
+            description  = 'Фонд капитального ремонта',
             buttons      = keyboard_4.get_json()
         ),
         TemplateElement(
-            title        = 'Имущественные торги',
-            description  = 'Описание',
+            title        = 'Имторги',
+            description  = 'Имущественные торги',
             buttons      = keyboard_5.get_json()
         )
     )
 
-    await message.answer('Отлично!\nВыберите нужный сценарий:', template=carousel)
+    await message.answer('Найдите интересную вам процедуру и подайте заявку ', template=carousel)
     await message.answer('Нужна помощь?', keyboard=keyboard)
+    
 
 
 @bot.on.private_message(payload={'cmd' : 'zakazchik-44-fz'})
@@ -158,43 +169,57 @@ async def scenario_imtorgi_handler(message: Message):
 
 @bot.on.private_message(payload={'cmd' : 'postavshik'})
 async def client_is_postavshik(message: Message):
+    await message.answer("""
+    Как получить доступ к работе на площадке для поставщиков?
+    
+        1️⃣ Оформите электронную подпись
+
+    Наличие электронной подписи — обязательное условие работы на ЕЭТП.
+
+        2️⃣ Получите аккредитацию
+
+    Соберите документы и подайте заявку на аккредитацию. Подробнее можно узнать в Базе Знаний.
+
+        3️⃣ Участвуйте в торгах
+    """)
+
     keyboard_1 = Keyboard().add(Text('Перейти', {'cmd' : 'postavshik-44-fz'}),   color=blue)
     keyboard_2 = Keyboard().add(Text('Перейти', {'cmd' : 'postavshik-223-fz'}),  color=blue)
     keyboard_3 = Keyboard().add(Text('Перейти', {'cmd' : 'postavshik-rb'}),      color=blue)
     keyboard_4 = Keyboard().add(Text('Перейти', {'cmd' : 'postavshik-fkr'}),     color=blue)
     keyboard_5 = Keyboard().add(Text('Перейти', {'cmd' : 'postavshik-imtorgi'}), color=blue)
 
-    keyboard = Keyboard(inline=True).add(OpenLink('https://google.com', 'FAQ'), color=blue)
+    keyboard = Keyboard(inline=True).add(OpenLink('https://www.roseltorg.ru/for-suppliers', 'Помощь поставщикам'), color=blue)
     
     carousel = template_gen(
         TemplateElement(
             title        = '44-ФЗ',
-            description  = 'Описание',
+            description  = 'Государственные закупки',
             buttons      = keyboard_1.get_json()
         ),
         TemplateElement(
             title        = '223-ФЗ',
-            description  = 'Описание',
+            description  = 'Коммерчиские и корпоративные закупки',
             buttons      = keyboard_2.get_json()
         ),
         TemplateElement(
             title        = 'РБ',
-            description  = 'Описание',
+            description  = 'Росэлторг.Бизнес',
             buttons      = keyboard_3.get_json()
         ),
         TemplateElement(
             title        = 'ФКР',
-            description  = 'Описание',
+            description  = 'Фонд капитального ремонта',
             buttons      = keyboard_4.get_json()
         ),
         TemplateElement(
-            title        = 'Имущественные торги',
-            description  = 'Описание',
+            title        = 'Имторги',
+            description  = 'Имущественные торги',
             buttons      = keyboard_5.get_json()
         )
     )
 
-    await message.answer('Отлично!\nВыберите нужный сценарий:', template=carousel)
+    await message.answer('Найдите интересную вам процедуру и подайте заявку ', template=carousel)
     await message.answer('Нужна помощь?', keyboard=keyboard)
 
 
@@ -217,4 +242,5 @@ async def scenario_fkr_handler(message: Message):
 @bot.on.private_message(payload={'cmd' : 'postavshik-imtorgi'})
 async def scenario_imtorgi_handler(message: Message):
     await message.answer('работает!')
+
 bot.run_forever()
