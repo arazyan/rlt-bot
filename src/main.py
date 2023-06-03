@@ -88,10 +88,10 @@ async def about_us_handler(message: Message):
 async def postavshik_or_pokupatel(message: Message):
     keyboard = Keyboard(one_time=True).add(Text('Заказчик', {'cmd' : 'zakazchik'}), color=blue)
     keyboard.add(Text('Поставщик', {'cmd' : 'postavshik'}), color=blue)
+    keyboard.row()
+    keyboard.add(Text('Вернуться назад', {'cmd' : 'start'}), color=red)
 
     await message.answer('Кто вы?', keyboard=keyboard)
-
-
 
 
 @bot.on.private_message(payload={'cmd' : 'zakazchik'})
